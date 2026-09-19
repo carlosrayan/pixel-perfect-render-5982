@@ -14,7 +14,215 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      analyses: {
+        Row: {
+          categories: Json
+          created_at: string
+          id: string
+          job_id: string
+          result: Json
+          score: number
+          user_id: string
+        }
+        Insert: {
+          categories?: Json
+          created_at?: string
+          id?: string
+          job_id: string
+          result?: Json
+          score?: number
+          user_id: string
+        }
+        Update: {
+          categories?: Json
+          created_at?: string
+          id?: string
+          job_id?: string
+          result?: Json
+          score?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analyses_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jobs: {
+        Row: {
+          company: string | null
+          created_at: string
+          description: string
+          id: string
+          location: string | null
+          parsed: Json
+          status: string
+          title: string
+          updated_at: string
+          url: string | null
+          user_id: string
+          work_model: string | null
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          location?: string | null
+          parsed?: Json
+          status?: string
+          title: string
+          updated_at?: string
+          url?: string | null
+          user_id: string
+          work_model?: string | null
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          location?: string | null
+          parsed?: Json
+          status?: string
+          title?: string
+          updated_at?: string
+          url?: string | null
+          user_id?: string
+          work_model?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          certifications: Json
+          created_at: string
+          current_position: string | null
+          desired_position: string | null
+          education: Json
+          email: string | null
+          experiences: Json
+          full_name: string | null
+          headline: string | null
+          id: string
+          languages: Json
+          links: Json
+          location: string | null
+          onboarding_completed: boolean
+          phone: string | null
+          projects: Json
+          salary_expectation: string | null
+          skills: Json
+          summary: string | null
+          updated_at: string
+          work_model: string | null
+        }
+        Insert: {
+          certifications?: Json
+          created_at?: string
+          current_position?: string | null
+          desired_position?: string | null
+          education?: Json
+          email?: string | null
+          experiences?: Json
+          full_name?: string | null
+          headline?: string | null
+          id: string
+          languages?: Json
+          links?: Json
+          location?: string | null
+          onboarding_completed?: boolean
+          phone?: string | null
+          projects?: Json
+          salary_expectation?: string | null
+          skills?: Json
+          summary?: string | null
+          updated_at?: string
+          work_model?: string | null
+        }
+        Update: {
+          certifications?: Json
+          created_at?: string
+          current_position?: string | null
+          desired_position?: string | null
+          education?: Json
+          email?: string | null
+          experiences?: Json
+          full_name?: string | null
+          headline?: string | null
+          id?: string
+          languages?: Json
+          links?: Json
+          location?: string | null
+          onboarding_completed?: boolean
+          phone?: string | null
+          projects?: Json
+          salary_expectation?: string | null
+          skills?: Json
+          summary?: string | null
+          updated_at?: string
+          work_model?: string | null
+        }
+        Relationships: []
+      }
+      resumes: {
+        Row: {
+          analysis_id: string | null
+          changes: Json
+          content: Json
+          created_at: string
+          id: string
+          is_master: boolean
+          job_id: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          analysis_id?: string | null
+          changes?: Json
+          content?: Json
+          created_at?: string
+          id?: string
+          is_master?: boolean
+          job_id?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          analysis_id?: string | null
+          changes?: Json
+          content?: Json
+          created_at?: string
+          id?: string
+          is_master?: boolean
+          job_id?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resumes_analysis_id_fkey"
+            columns: ["analysis_id"]
+            isOneToOne: false
+            referencedRelation: "analyses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resumes_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
