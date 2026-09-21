@@ -36,6 +36,7 @@ function JobDetailPage() {
   const analysis = (analysisRow?.result ?? {}) as unknown as AnalysisResult;
   const parsed = job.parsed as unknown as ParsedJob;
   const score = analysisRow?.score ?? 0;
+  const jobTitle = job.title;
 
   async function createResume() {
     if (!profile || !analysisRow) return;
@@ -44,7 +45,7 @@ function JobDetailPage() {
       const result = await generate({ data: { profile, parsed, analysis } });
       const { data: userData } = await supabase.auth.getUser();
       if (!userData.user) throw new Error("Sessão expirada.");
-      const { data, error } = await supabase.from("resumes").insert({ user_id: userData.user.id, job_id: jobId, analysis_id: analysisRow.id, title: `Currículo — ${job.title}`, content: result.content as unknown as Json, changes: result.changes as unknown as Json }).select("id").single();
+      const { data, error } = await supabase.from("resumes").insert({ user_id: userData.user.id, job_id: jobId, analysis_id: analysisRow.id, title: `Currículo — ${jobTitle}`, content: result.content as unknown as Json, changes: result.changes as unknown as Json }).select("id").single();
       if (error) throw error;
       navigate({ to: "/curriculos/$resumeId", params: { resumeId: data.id } });
     } catch (error) { toast.error(error instanceof Error ? error.message : "Não foi possível gerar o currículo."); }
