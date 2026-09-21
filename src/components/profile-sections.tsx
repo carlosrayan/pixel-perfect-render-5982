@@ -32,8 +32,8 @@ function ItemShell({
 }: {
   children: React.ReactNode;
   onRemove: () => void;
-  onMoveUp?: () => void;
-  onMoveDown?: () => void;
+  onMoveUp?: (() => void) | undefined;
+  onMoveDown?: (() => void) | undefined;
 }) {
   return (
     <div className="rounded-xl border border-border p-4">

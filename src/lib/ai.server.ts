@@ -1,4 +1,4 @@
-const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/responses";
 
 export type AIMessage = { role: "system" | "user"; content: string };
 
@@ -9,6 +9,10 @@ export async function askForJson<T>(messages: AIMessage[]): Promise<T> {
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new Error("Serviço de IA indisponível no momento.");
 
+  const input = messages.map((message) => ({
+    role: message.role,
+    content: [{ type: "input_text", text: message.content }],
+  }));
   const response = await fetch(GATEWAY_URL, {
     method: "POST",
     headers: {
@@ -17,9 +21,13 @@ export async function askForJson<T>(messages: AIMessage[]): Promise<T> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "google/gemini-3.8-flash",
-      messages,
-      response_format: { type: "json_object" },
+      model: "openai/gpt-6-astra",
+      input,
+      stream: true,
+      reasoning: { effort: "low", summary: "auto" },
+      include: ["reasoning.encrypted_content"],
+      store: false,
+      text: { format: { type: "json_object" } },
     }),
   });
 
@@ -35,10 +43,27 @@ export async function askForJson<T>(messages: AIMessage[]): Promise<T> {
     throw new Error("Não foi possível concluir a análise agora.");
   }
 
-  const payload = (await response.json()) as {
-    choices?: { message?: { content?: string } }[];
-  };
-  const content = payload.choices?.[0]?.message?.content ?? "";
+  const reader = response.body?.getReader();
+  if (!reader) throw new Error("A análise não retornou conteúdo.");
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let content = "";
+  while (true) {
+    const chunk = await reader.read();
+    if (chunk.done) break;
+    buffer += decoder.decode(chunk.value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop() ?? "";
+    for (const line of lines) {
+      if (!line.startsWith("data: ") || line === "data: [DONE]") continue;
+      try {
+        const event = JSON.parse(line.slice(6)) as { type?: string; delta?: string };
+        if (event.type === "response.output_text.delta") content += event.delta ?? "";
+      } catch {
+        // Eventos incompletos são ignorados; o próximo bloco continua o stream.
+      }
+    }
+  }
   const cleaned = content
     .trim()
     .replace(/^```(?:json)?/i, "")

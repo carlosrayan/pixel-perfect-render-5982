@@ -13,9 +13,17 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as RedefinirSenhaRouteImport } from './routes/redefinir-senha'
+import { Route as AuthenticatedAnalisarRouteImport } from './routes/_authenticated/analisar'
+import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authenticated/configuracoes'
+import { Route as AuthenticatedCurriculoRouteImport } from './routes/_authenticated/curriculo'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedHistoricoRouteImport } from './routes/_authenticated/historico'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated/perfil'
+import { Route as AuthenticatedCurriculosIndexRouteImport } from './routes/_authenticated/curriculos.index'
+import { Route as AuthenticatedCurriculosResumeIdRouteImport } from './routes/_authenticated/curriculos.$resumeId'
+import { Route as AuthenticatedVagasIndexRouteImport } from './routes/_authenticated/vagas.index'
+import { Route as AuthenticatedVagasJobIdRouteImport } from './routes/_authenticated/vagas.$jobId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -36,9 +44,30 @@ const RedefinirSenhaRoute = RedefinirSenhaRouteImport.update({
   path: '/redefinir-senha',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAnalisarRoute = AuthenticatedAnalisarRouteImport.update({
+  id: '/analisar',
+  path: '/analisar',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedConfiguracoesRoute =
+  AuthenticatedConfiguracoesRouteImport.update({
+    id: '/configuracoes',
+    path: '/configuracoes',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedCurriculoRoute = AuthenticatedCurriculoRouteImport.update({
+  id: '/curriculo',
+  path: '/curriculo',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedHistoricoRoute = AuthenticatedHistoricoRouteImport.update({
+  id: '/historico',
+  path: '/historico',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
@@ -51,22 +80,60 @@ const AuthenticatedPerfilRoute = AuthenticatedPerfilRouteImport.update({
   path: '/perfil',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCurriculosIndexRoute =
+  AuthenticatedCurriculosIndexRouteImport.update({
+    id: '/curriculos/',
+    path: '/curriculos/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedCurriculosResumeIdRoute =
+  AuthenticatedCurriculosResumeIdRouteImport.update({
+    id: '/curriculos/$resumeId',
+    path: '/curriculos/$resumeId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedVagasIndexRoute = AuthenticatedVagasIndexRouteImport.update({
+  id: '/vagas/',
+  path: '/vagas/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedVagasJobIdRoute = AuthenticatedVagasJobIdRouteImport.update({
+  id: '/vagas/$jobId',
+  path: '/vagas/$jobId',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/redefinir-senha': typeof RedefinirSenhaRoute
+  '/analisar': typeof AuthenticatedAnalisarRoute
+  '/configuracoes': typeof AuthenticatedConfiguracoesRoute
+  '/curriculo': typeof AuthenticatedCurriculoRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/historico': typeof AuthenticatedHistoricoRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/perfil': typeof AuthenticatedPerfilRoute
+  '/curriculos/$resumeId': typeof AuthenticatedCurriculosResumeIdRoute
+  '/vagas/$jobId': typeof AuthenticatedVagasJobIdRoute
+  '/curriculos/': typeof AuthenticatedCurriculosIndexRoute
+  '/vagas/': typeof AuthenticatedVagasIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/redefinir-senha': typeof RedefinirSenhaRoute
+  '/analisar': typeof AuthenticatedAnalisarRoute
+  '/configuracoes': typeof AuthenticatedConfiguracoesRoute
+  '/curriculo': typeof AuthenticatedCurriculoRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/historico': typeof AuthenticatedHistoricoRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/perfil': typeof AuthenticatedPerfilRoute
+  '/curriculos/$resumeId': typeof AuthenticatedCurriculosResumeIdRoute
+  '/vagas/$jobId': typeof AuthenticatedVagasJobIdRoute
+  '/curriculos': typeof AuthenticatedCurriculosIndexRoute
+  '/vagas': typeof AuthenticatedVagasIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -74,9 +141,17 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/redefinir-senha': typeof RedefinirSenhaRoute
+  '/_authenticated/analisar': typeof AuthenticatedAnalisarRoute
+  '/_authenticated/configuracoes': typeof AuthenticatedConfiguracoesRoute
+  '/_authenticated/curriculo': typeof AuthenticatedCurriculoRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/historico': typeof AuthenticatedHistoricoRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
+  '/_authenticated/curriculos/$resumeId': typeof AuthenticatedCurriculosResumeIdRoute
+  '/_authenticated/vagas/$jobId': typeof AuthenticatedVagasJobIdRoute
+  '/_authenticated/curriculos/': typeof AuthenticatedCurriculosIndexRoute
+  '/_authenticated/vagas/': typeof AuthenticatedVagasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -84,26 +159,50 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/redefinir-senha'
+    | '/analisar'
+    | '/configuracoes'
+    | '/curriculo'
     | '/dashboard'
+    | '/historico'
     | '/onboarding'
     | '/perfil'
+    | '/curriculos/$resumeId'
+    | '/vagas/$jobId'
+    | '/curriculos/'
+    | '/vagas/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/redefinir-senha'
+    | '/analisar'
+    | '/configuracoes'
+    | '/curriculo'
     | '/dashboard'
+    | '/historico'
     | '/onboarding'
     | '/perfil'
+    | '/curriculos/$resumeId'
+    | '/vagas/$jobId'
+    | '/curriculos'
+    | '/vagas'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/redefinir-senha'
+    | '/_authenticated/analisar'
+    | '/_authenticated/configuracoes'
+    | '/_authenticated/curriculo'
     | '/_authenticated/dashboard'
+    | '/_authenticated/historico'
     | '/_authenticated/onboarding'
     | '/_authenticated/perfil'
+    | '/_authenticated/curriculos/$resumeId'
+    | '/_authenticated/vagas/$jobId'
+    | '/_authenticated/curriculos/'
+    | '/_authenticated/vagas/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -143,11 +242,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RedefinirSenhaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/analisar': {
+      id: '/_authenticated/analisar'
+      path: '/analisar'
+      fullPath: '/analisar'
+      preLoaderRoute: typeof AuthenticatedAnalisarRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/configuracoes': {
+      id: '/_authenticated/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/configuracoes'
+      preLoaderRoute: typeof AuthenticatedConfiguracoesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/curriculo': {
+      id: '/_authenticated/curriculo'
+      path: '/curriculo'
+      fullPath: '/curriculo'
+      preLoaderRoute: typeof AuthenticatedCurriculoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/historico': {
+      id: '/_authenticated/historico'
+      path: '/historico'
+      fullPath: '/historico'
+      preLoaderRoute: typeof AuthenticatedHistoricoRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/onboarding': {
@@ -164,19 +291,63 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPerfilRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/curriculos/': {
+      id: '/_authenticated/curriculos/'
+      path: '/curriculos'
+      fullPath: '/curriculos/'
+      preLoaderRoute: typeof AuthenticatedCurriculosIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/curriculos/$resumeId': {
+      id: '/_authenticated/curriculos/$resumeId'
+      path: '/curriculos/$resumeId'
+      fullPath: '/curriculos/$resumeId'
+      preLoaderRoute: typeof AuthenticatedCurriculosResumeIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/vagas/': {
+      id: '/_authenticated/vagas/'
+      path: '/vagas'
+      fullPath: '/vagas/'
+      preLoaderRoute: typeof AuthenticatedVagasIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/vagas/$jobId': {
+      id: '/_authenticated/vagas/$jobId'
+      path: '/vagas/$jobId'
+      fullPath: '/vagas/$jobId'
+      preLoaderRoute: typeof AuthenticatedVagasJobIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAnalisarRoute: typeof AuthenticatedAnalisarRoute
+  AuthenticatedConfiguracoesRoute: typeof AuthenticatedConfiguracoesRoute
+  AuthenticatedCurriculoRoute: typeof AuthenticatedCurriculoRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedHistoricoRoute: typeof AuthenticatedHistoricoRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
+  AuthenticatedCurriculosResumeIdRoute: typeof AuthenticatedCurriculosResumeIdRoute
+  AuthenticatedVagasJobIdRoute: typeof AuthenticatedVagasJobIdRoute
+  AuthenticatedCurriculosIndexRoute: typeof AuthenticatedCurriculosIndexRoute
+  AuthenticatedVagasIndexRoute: typeof AuthenticatedVagasIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAnalisarRoute: AuthenticatedAnalisarRoute,
+  AuthenticatedConfiguracoesRoute: AuthenticatedConfiguracoesRoute,
+  AuthenticatedCurriculoRoute: AuthenticatedCurriculoRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedHistoricoRoute: AuthenticatedHistoricoRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
+  AuthenticatedCurriculosResumeIdRoute: AuthenticatedCurriculosResumeIdRoute,
+  AuthenticatedVagasJobIdRoute: AuthenticatedVagasJobIdRoute,
+  AuthenticatedCurriculosIndexRoute: AuthenticatedCurriculosIndexRoute,
+  AuthenticatedVagasIndexRoute: AuthenticatedVagasIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

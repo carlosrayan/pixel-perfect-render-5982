@@ -1,6 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { ProfileData } from "@/lib/matchcv-types";
+import type { Database } from "@/integrations/supabase/types";
+
+type ProfileUpdate = Database["public"]["Tables"]["profiles"]["Update"];
 
 export function useSession() {
   return useQuery({
@@ -30,7 +33,7 @@ export function useProfile() {
       if (!data) {
         const { data: created, error: insertError } = await supabase
           .from("profiles")
-          .insert({ id: user.id, email: user.email })
+          .insert({ id: user.id, email: user.email ?? null })
           .select("*")
           .single();
         if (insertError) throw insertError;
@@ -44,7 +47,7 @@ export function useProfile() {
 export function useUpdateProfile() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (values: Record<string, unknown>) => {
+    mutationFn: async (values: ProfileUpdate) => {
       const { data: userData } = await supabase.auth.getUser();
       const user = userData.user;
       if (!user) throw new Error("Sessão expirada.");
@@ -71,6 +74,21 @@ export function useJobs() {
   });
 }
 
+export function useJob(jobId: string) {
+  return useQuery({
+    queryKey: ["jobs", jobId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("jobs")
+        .select("*, analyses(*)")
+        .eq("id", jobId)
+        .single();
+      if (error) throw error;
+      return data;
+    },
+  });
+}
+
 export function useResumes() {
   return useQuery({
     queryKey: ["resumes"],
@@ -81,6 +99,21 @@ export function useResumes() {
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
+    },
+  });
+}
+
+export function useResume(resumeId: string) {
+  return useQuery({
+    queryKey: ["resumes", resumeId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("resumes")
+        .select("*, jobs(title, company)")
+        .eq("id", resumeId)
+        .single();
+      if (error) throw error;
+      return data;
     },
   });
 }
